@@ -6,7 +6,7 @@ import org.objectweb.asm.Opcodes;
 
 public class DumpClassVisitor extends ClassVisitor {
 
-    private String className;
+    private final String className;
 
     public DumpClassVisitor(String className) {
         super(Opcodes.ASM5);

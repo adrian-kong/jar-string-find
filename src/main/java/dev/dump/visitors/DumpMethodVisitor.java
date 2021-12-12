@@ -7,7 +7,7 @@ import org.objectweb.asm.Opcodes;
 
 public class DumpMethodVisitor extends MethodVisitor {
 
-    private String className;
+    private final String className;
 
     private final ThreatHandler threatHandler = ThreatHandler.getInstance();
 
@@ -23,7 +23,7 @@ public class DumpMethodVisitor extends MethodVisitor {
     public void visitLdcInsn(Object o) {
         if (o instanceof String str) {
             if (threatHandler.isSuspicious(str)) {
-                System.out.printf("[%s] %s\n", className, str);
+                System.out.printf("[%s] %s%n", className, str);
             }
         }
         super.visitLdcInsn(o);
@@ -41,7 +41,7 @@ public class DumpMethodVisitor extends MethodVisitor {
     @Override
     public void visitMethodInsn(int i, String s, String s1, String s2, boolean b) {
         if (threatHandler.isSuspicious(s)) {
-            System.out.printf("[%s] %s %s %s\n", className, s, s1, s2);
+            System.out.printf("[%s] %s %s %s%n", className, s, s1, s2);
         }
         super.visitMethodInsn(i, s, s1, s2, b);
     }

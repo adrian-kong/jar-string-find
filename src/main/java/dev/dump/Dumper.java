@@ -12,16 +12,16 @@ import java.util.jar.JarInputStream;
 
 public class Dumper {
 
-    public void search(File file) throws IOException {
+    public void read(File file) throws IOException {
         try (JarInputStream jis = new JarInputStream(new FileInputStream(file))) {
             JarEntry entry;
-
             while ((entry = jis.getNextJarEntry()) != null) {
-                if (entry.getName().endsWith(".class")) {
-                    try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-                        bos.writeBytes(jis.readAllBytes());
-                        ClassReader classReader = new ClassReader(bos.toByteArray());
-                        classReader.accept(new DumpClassVisitor(entry.getName()), 0);
+                try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                    bos.writeBytes(jis.readAllBytes());
+                    if (entry.getName().endsWith(".class")) {
+
+                        ClassReader reader = new ClassReader(bos.toByteArray());
+                        reader.accept(new DumpClassVisitor(entry.getName()), ClassReader.EXPAND_FRAMES);
                     }
                 }
             }
